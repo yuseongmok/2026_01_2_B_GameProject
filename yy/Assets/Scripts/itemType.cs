@@ -1,6 +1,6 @@
-public enum itemType
+public enum ItemType
 {
-    Wepon,
+    Weapon,
     Armor,
     Consumable,
     Shield,

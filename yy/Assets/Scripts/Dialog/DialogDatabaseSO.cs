@@ -1,32 +1,33 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Jobs;
 
 [CreateAssetMenu(fileName = "DialogDatabaseSO", menuName = "Dialog System/DialogDatabaseSO")]
 public class DialogDatabaseSO : ScriptableObject
 {
     public List<DialogSO> dialogs = new List<DialogSO>();
 
-    private Dictionary<int, DialogSO> dialogsByld;        //Ä³½ÌÀ» À§ÇÑ µñ¼Å³Ê¸®
+    private Dictionary<int, DialogSO> dialogsById;                      //Ä³½ÌÀ» À§ÇÑ µñ¼Å³Ê¸® »ç¿ë
 
     public void Initailize()
     {
-        dialogsByld = new Dictionary<int, DialogSO>();
+        dialogsById = new Dictionary<int, DialogSO>();
 
         foreach (var dialog in dialogs)
         {
             if (dialog != null)
             {
-                dialogsByld[dialog.id] = dialog;
+                dialogsById[dialog.id] = dialog;
             }
         }
     }
 
-    public DialogSO GetDialogByld(int id)
+    public DialogSO GetDialongById(int id)
     {
-        if (dialogsByld == null)
+        if (dialogsById == null)
             Initailize();
 
-        if (dialogsByld.TryGetValue(id, out DialogSO dialog))
+        if(dialogsById.TryGetValue(id, out DialogSO dialog))
         {
             return dialog;
         }

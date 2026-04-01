@@ -3,45 +3,44 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-
 public class ItemDataLoader : MonoBehaviour
 {
     [SerializeField]
-    private string jsonFileName = "items";          //Resource 폴더에서 가져올 Json 파일 이름
+    private string jsonFileName = "items";                      //Resource 폴더에서 가저올 JSON 파일 이름 
 
-    private List<itemData> itemList;
+    private List<ItemData> itemList;
 
-    private void Start()
+    void Start()
     {
-        LoaditemData();
+        LoadItemData();
     }
 
-    //한글 인코딩을 위한 핼퍼 함수
 
+    //한글 인코딩을 위한 핼퍼 함수 
     private string EncodeKorean(string text)
     {
-        if (string.IsNullOrEmpty(text)) return "";    //텍스트가 Null 값이면 함수를 끝낸다.
-        byte[] bytes = Encoding.Default.GetBytes(text); //string 을 Byte 배열로 변환한 후
-        return Encoding.UTF8.GetString(bytes);        //언코딩을 UTF8로 바꾼다.
+        if (string.IsNullOrEmpty(text)) return "";             //텍스트가 NULL 값이면 함수를 끝낸다. 
+        byte[] bytes = Encoding.Default.GetBytes(text);         //string 을 Byte 배열로 변환한 후
+        return Encoding.UTF8.GetString(bytes);                  //인코딩을 UTF8로 바꾼다. 
     }
 
-    void LoaditemData()
+    void LoadItemData()
     {
-        TextAsset jsonFile = Resources.Load<TextAsset>(jsonFileName);  //TextAsset 형태로 Json 파일을 로딩한다.
+        TextAsset jsonFile = Resources.Load<TextAsset>(jsonFileName);               //TextAsset 형태로 Json 파일을 로딩한다. 
 
         if (jsonFile != null)
         {
-            //원본 텍스트에서 UTF8로 분리
+            //원본 텍스트에서 UTF8로 변환 처리
             byte[] bytes = Encoding.Default.GetBytes(jsonFile.text);
             string currnetText = Encoding.UTF8.GetString(bytes);
 
             //변환 된 텍스트 사용
-            itemList = JsonConvert.DeserializeObject<List<itemData>>(currnetText);
+            itemList = JsonConvert.DeserializeObject<List<ItemData>>(currnetText);
 
             Debug.Log($"로드된 아이템 수 : {itemList.Count}");
 
-            foreach (var item in itemList)
-            {
+            foreach(var item in itemList)
+            { 
                 Debug.Log($"아이템 : {EncodeKorean(item.itemName)}, 설명 : {EncodeKorean(item.description)}");
             }
         }
