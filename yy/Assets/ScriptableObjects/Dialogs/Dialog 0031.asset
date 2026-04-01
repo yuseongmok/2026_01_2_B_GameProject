@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36a0b78d353e5e04f8cfd63649fb201d, type: 3}
-  m_Name: Dialog_0031
+  m_Name: Dialog 0031
   m_EditorClassIdentifier: Assembly-CSharp::DialogSO
   id: 31
   characterName: "\uC0C1\uC778"
