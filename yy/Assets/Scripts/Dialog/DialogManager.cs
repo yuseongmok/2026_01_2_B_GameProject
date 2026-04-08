@@ -1,32 +1,32 @@
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using System.Collections;
-//using UnityEngine.UIElements;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Rendering.MaterialUpgrader;
 
 public class DialogManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static DialogManager Instance { get; private set; }
 
-    [Header("Dialog Retereces")]
+    [Header("Dialog References")]
     [SerializeField] private DialogDatabaseSO dialogDatabase;
 
     [Header("UI References")]
     [SerializeField] private GameObject dialogPanel;
 
-    [SerializeField] private Image portraitImage;          //캐릭터 초상화 이미지 UI 요소 추가
+
+    [SerializeField] private Image portraitImage;                               //캐릭터 초상화 이미지 UI 요소 추가 
 
     [SerializeField] private TextMeshProUGUI characterNameText;
     [SerializeField] private TextMeshProUGUI dialogText;
     [SerializeField] private Button NextButton;
 
     [Header("Dialog Settings")]
-    [SerializeField] private float typingSpeed = 0.5f;
+    [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private bool useTypewriterEffect = true;
 
     private bool isTyping = false;
-    private Coroutine typingCoroutine;           //코루틴 선언
+    private Coroutine typingCoroutine;                              //코루틴 선언
 
     private DialogSO currentDialog;
 
@@ -42,9 +42,10 @@ public class DialogManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         if (dialogDatabase != null)
         {
-            dialogDatabase.Initailize();            //초기화
+            dialogDatabase.Initailize();                    //초기화
         }
         else
         {
@@ -53,17 +54,21 @@ public class DialogManager : MonoBehaviour
 
         if (NextButton != null)
         {
-            NextButton.onClick.AddListener(NextDialog);                //버튼 리스너 등록
+            NextButton.onClick.AddListener(NextDialog);                   //버튼 리스너 등록 
         }
         else
         {
-            Debug.LogError("Next Button is Not ass igned!");
+            Debug.LogError("Next Button is Not assigned!");
         }
     }
 
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        //UI초기화 후 대화 시작 (ID 1)
+        CloseDialog();
+        StartDialog(1);                         //자동으로 첫 번째 대화 시작
     }
 
     // Update is called once per frame
@@ -76,13 +81,13 @@ public class DialogManager : MonoBehaviour
     public void StartDialog(int dialogId)
     {
         DialogSO dialog = dialogDatabase.GetDialongById(dialogId);
-        if(dialog != null) 
+        if(dialog != null)
         {
             StartDialog(dialog);
         }
         else
         {
-            Debug.LogError($"Dialog with ID {dialog} not found");
+            Debug.LogError($"Dialog with ID {dialogId} not found!");
         }
     }
 
@@ -98,55 +103,58 @@ public class DialogManager : MonoBehaviour
 
     public void ShowDialog()
     {
-        if (currentDialog == null) return;
-        characterNameText.text = currentDialog.characterName;       //캐릭터 이름 설정
+        Debug.Log(currentDialog.portraitPath);
 
-        if (useTypewriterEffect)                            //대화 텍스트 설정 부분 수정
-        { 
+        if (currentDialog == null) return;
+        characterNameText.text = currentDialog.characterName;               //캐릭터 이름 설정
+
+        if(useTypewriterEffect)                                                 //대화 텍스트 설정 부분 수정 
+        {
             StartTypingEffect(currentDialog.text);
         }
         else
         {
-            dialogText.text = currentDialog.text;           //대화 텍스트 설정 
+            dialogText.text = currentDialog.text;                               //대화 텍스트 설정
         }
+           
 
         //초상화 설정 (새로 추가된 부분)
-        if (currentDialog.portrait != null)
+        if(currentDialog.portrait != null)
         {
             portraitImage.sprite = currentDialog.portrait;
             portraitImage.gameObject.SetActive(true);
         }
-        else if (!string.IsNullOrEmpty(currentDialog.portraitPath))
+        else if(!string.IsNullOrEmpty(currentDialog.portraitPath))
         {
-            //Resources 폴더에서 이미지 로드 (Assets/Resources/Characters/
-            Debug.Log(currentDialog.portraitPath);
+            //Resources 폴더에서 이미지 로드 (Assets/Resources/Characters/Narrator.png) 예시 이미지 경로            
             Sprite portrait = Resources.Load<Sprite>(currentDialog.portraitPath);
-            if (portrait != null)
+           
+            if(portrait != null)
             {
                 portraitImage.sprite = portrait;
-                portraitImage.gameObject.SetActive(true);
+                portraitImage.gameObject.SetActive(true);   
             }
             else
             {
-                Debug.LogWarning($"Portrait not fount at path : {currentDialog.portraitPath}");
+                Debug.LogWarning($"Portrait not found at path : {currentDialog.portraitPath}");
                 portraitImage.gameObject.SetActive(false);
             }
-
         }
         else
         {
             portraitImage.gameObject.SetActive(false);
         }
     }
-    public void CloseDialog()                                    //대화 종료
+    public void CloseDialog()                                               //대화 종료
     {
         dialogPanel.SetActive(false);
         currentDialog = null;
-        StopTypingEffect();                       //타이핑 효과 중지 추가
+        StopTypingEffect();                                 //타이핑 효과 중지 추가 
     }
+
     public void NextDialog()
     {
-        if (isTyping)                         //타이핑 중이면 타이핑 완료 처리
+        if(isTyping)                                    //타이핑 중이면 타이핑 완료 처리 
         {
             StopTypingEffect();
             dialogText.text = currentDialog.text;
@@ -165,14 +173,11 @@ public class DialogManager : MonoBehaviour
             else
             {
                 CloseDialog();
-                //여기가 실행시 ID는 있는데 데이터베이스에서 못찾음
-                Debug.LogError($"ID {currentDialog.nextId}를 데이터베이스에서 찾을 수 없음");
             }
         }
         else
         {
             CloseDialog();
-            Debug.Log("다음 대화 ID가 없음");
         }
     }
 
@@ -185,12 +190,12 @@ public class DialogManager : MonoBehaviour
             dialogText.text += c;
             yield return new WaitForSeconds(typingSpeed);
         }
-        isTyping = false;  
+        isTyping = false;
     }
 
     private void StopTypingEffect()
     {
-        if(typingCoroutine != null)
+        if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
             typingCoroutine = null;

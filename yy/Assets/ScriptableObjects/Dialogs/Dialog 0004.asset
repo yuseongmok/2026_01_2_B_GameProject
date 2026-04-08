@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36a0b78d353e5e04f8cfd63649fb201d, type: 3}
-  m_Name: Dialog 0004
+  m_Name: Dialog_0004
   m_EditorClassIdentifier: Assembly-CSharp::DialogSO
   id: 4
   characterName: "\uD0D0\uD5D8\uAC00"
@@ -18,7 +18,7 @@ MonoBehaviour:
     \uC5B4\uB5BB\uAC8C \uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?"
   nextId: -1
   choices:
-  - {fileID: 11400000, guid: cb1ccfaabd313af46af2951c0d8c97e0, type: 2}
-  - {fileID: 11400000, guid: 52d82a7d986118f42b15de2615db64e7, type: 2}
+  - {fileID: 11400000, guid: 117ed9529a3bee149b06e3787b0107b9, type: 2}
+  - {fileID: 11400000, guid: 795a0006c9d95a34ab2480c30b89286b, type: 2}
   portrait: {fileID: 0}
-  portraitPath: 
+  portraitPath: Characters/Explorer

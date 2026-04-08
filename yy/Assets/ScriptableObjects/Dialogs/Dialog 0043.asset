@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36a0b78d353e5e04f8cfd63649fb201d, type: 3}
-  m_Name: Dialog 0043
+  m_Name: Dialog_0043
   m_EditorClassIdentifier: Assembly-CSharp::DialogSO
   id: 43
   characterName: "\uB178\uC778"
@@ -20,4 +20,4 @@ MonoBehaviour:
   nextId: 44
   choices: []
   portrait: {fileID: 0}
-  portraitPath: 
+  portraitPath: Characters/OldMan
